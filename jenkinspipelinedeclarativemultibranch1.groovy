@@ -1,0 +1,64 @@
+pipeline{
+
+agent any
+
+parameters {
+  choice choices: ['master', 'development', 'sit', 'uat'], description: 'Select the Branch Name', name: 'BranchName'
+  string defaultValue: 'Mithun Software Solutions', name: 'PersonName'
+}
+
+
+tools{
+maven 'maven3.9.1'
+}
+
+options {
+  buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')
+  timestamps()
+}
+
+
+triggers {
+  pollSCM('* * * * * ')
+}
+
+
+stages{
+  stage('CheckoutCode'){
+  steps{
+  git branch: "${params.BranchName}", credentialsId: 'aaa8e2c0-226a-40ba-85eb-259762d67c15', url: 'https://github.com/MithunTechnologiesDevOps/maven-web-application.git'
+  }
+  }
+
+stage('Build'){
+steps{
+sh "mvn clean package"
+}
+}
+
+//Execute SonarQube Report
+stage('ExecuteSonarQubeReport'){
+steps{
+sh "mvn clean sonar:sonar"
+}
+}
+
+//UploadArtifactsIntoNexus
+stage('ArtifactsIntoNexus'){
+steps{
+sh "mvn clean deploy"
+}
+}
+
+//DeployApplication into TOmcat Server
+stage('DeployApp'){
+steps{
+sshagent(['f7ae5faf-c090-4b13-b320-c97958d97f02']) {
+   sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user15.207.98.218/:/opt/apache-tomcat-9.0.73/webapps/"
+}
+}
+}
+
+}//stages closing
+
+}//pipeline closing
