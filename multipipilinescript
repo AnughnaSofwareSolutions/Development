@@ -26,7 +26,7 @@ triggers {
 stages{
   stage('CheckoutCode'){
   steps{
-  git branch: "${params.BranchName}", credentialsId: 'e2abc8a9-60e7-4d74-833a-77a3645d73a1', url: 'https://github.com/MithunTechnologiesDevOps/maven-web-application.git'
+  git branch: "${params.BranchName}", credentialsId: 'e2abc8a9-60e7-4d74-833a-77a3645d73a1', url: 'https://github.com/AnughnaSofwareSolutions/Maven-Web-Application.git'
   }
   }
 
