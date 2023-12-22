@@ -7,7 +7,6 @@ parameters {
   string defaultValue: 'Mithun Software Solutions', name: 'PersonName'
 }
 
-
 tools{
 maven 'maven3.9.5'
 }
@@ -26,7 +25,7 @@ triggers {
 stages{
   stage('CheckoutCode'){
   steps{
-  git branch: "${params.BranchName}", credentialsId: 'aaa8e2c0-226a-40ba-85eb-259762d67c15', url: 'https://github.com/MithunTechnologiesDevOps/maven-web-application.git'
+  git branch: "${params.BranchName}", credentialsId: 'e2abc8a9-60e7-4d74-833a-77a3645d73a1', url: 'https://github.com/AnughnaSofwareSolutions/Maven-Web-Application.git'
   }
   }
 
@@ -54,10 +53,11 @@ sh "mvn clean deploy"
 stage('DeployApp'){
 steps{
 sshagent(['f7ae5faf-c090-4b13-b320-c97958d97f02']) {
-   sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@3.110.92.158:/opt/apache-tomcat-9.0.84/webapps/"
+    sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@3.110.92.158:/opt/apache-tomcat-9.0.84/webapps/"
 }
 }
 }
+
 
 }//stages closing
 
