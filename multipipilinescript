@@ -17,11 +17,6 @@ options {
 }
 
 
-triggers {
-  pollSCM('* * * * * ')
-}
-
-
 stages{
   stage('CheckoutCode'){
   steps{
